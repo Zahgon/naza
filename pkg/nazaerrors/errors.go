@@ -10,11 +10,4 @@ package nazaerrors
 
 // 将多个error合并为一个
 // 当前的策略是取第一个不为nil的error返回
-func CombineErrors(errs ...error) error {
-	for _, err := range errs {
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
+func CombineErrors(errs ...error) error { _ = "STUB: not implemented"; return nil }

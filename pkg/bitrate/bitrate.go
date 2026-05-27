@@ -11,7 +11,6 @@ package bitrate
 
 import (
 	"sync"
-	"time"
 )
 
 type Bitrate interface {
@@ -46,15 +45,7 @@ var defaultOption = Option{
 
 type ModOption func(option *Option)
 
-func New(modOptions ...ModOption) Bitrate {
-	option := defaultOption
-	for _, fn := range modOptions {
-		fn(&option)
-	}
-	return &bitrate{
-		option: option,
-	}
-}
+func New(modOptions ...ModOption) Bitrate { _ = "STUB: not implemented"; return *new(Bitrate) }
 
 type bitrate struct {
 	option Option
@@ -68,66 +59,8 @@ type bucket struct {
 	t int64 // unix 时间戳，单位毫秒
 }
 
-func (b *bitrate) Add(bytes int, nowUnixMs ...int64) {
-	var now int64
-	if len(nowUnixMs) == 0 {
-		now = time.Now().UnixNano() / 1e6
-	} else {
-		now = nowUnixMs[0]
-	}
+func (b *bitrate) Add(bytes int, nowUnixMs ...int64) { _ = "STUB: not implemented"; return }
 
-	b.mu.Lock()
-	defer b.mu.Unlock()
+func (b *bitrate) Rate(nowUnixMs ...int64) float32 { _ = "STUB: not implemented"; return 0 }
 
-	b.sweepStale(now)
-	b.bucketSlice = append(b.bucketSlice, bucket{
-		n: bytes,
-		t: now,
-	})
-}
-
-func (b *bitrate) Rate(nowUnixMs ...int64) float32 {
-	var now int64
-	if len(nowUnixMs) == 0 {
-		now = time.Now().UnixNano() / 1e6
-	} else {
-		now = nowUnixMs[0]
-	}
-
-	b.mu.Lock()
-	defer b.mu.Unlock()
-
-	b.sweepStale(now)
-	var total int
-	for i := range b.bucketSlice {
-		total += b.bucketSlice[i].n
-	}
-
-	var ret float32
-	switch b.option.Unit {
-	case UnitBitPerSec:
-		ret = float32(total*8*1000) / float32(b.option.WindowMs)
-	case UnitBytePerSec:
-		ret = float32(total*1000) / float32(b.option.WindowMs)
-	case UnitKbitPerSec:
-		ret = float32(total*8) / float32(b.option.WindowMs)
-	case UnitKbytePerSec:
-		ret = float32(total) / float32(b.option.WindowMs)
-	}
-	return ret
-}
-
-func (b *bitrate) sweepStale(now int64) {
-	i := 0
-	l := len(b.bucketSlice)
-	for ; i < l; i++ {
-		if now-b.bucketSlice[i].t <= int64(b.option.WindowMs) {
-			break
-		}
-	}
-	if i == l {
-		b.bucketSlice = nil
-	} else {
-		b.bucketSlice = b.bucketSlice[i:]
-	}
-}
+func (b *bitrate) sweepStale(now int64) { _ = "STUB: not implemented"; return }

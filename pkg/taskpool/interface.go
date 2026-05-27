@@ -83,28 +83,8 @@ var defaultOption = Option{
 type ModOption func(option *Option)
 
 func NewPool(modOptions ...ModOption) (Pool, error) {
-	option := defaultOption
-
-	for _, fn := range modOptions {
-		fn(&option)
-	}
-
-	if err := validate(option); err != nil {
-		return nil, err
-	}
-
-	return newPool(option), nil
+	_ = "STUB: not implemented"
+	return *new(Pool), nil
 }
 
-func validate(option Option) error {
-	if option.InitWorkerNum < 0 {
-		return ErrTaskPool
-	}
-	if option.MaxWorkerNum < 0 {
-		return ErrTaskPool
-	}
-	if option.MaxWorkerNum > 0 && option.InitWorkerNum > option.MaxWorkerNum {
-		return ErrTaskPool
-	}
-	return nil
-}
+func validate(option Option) error { _ = "STUB: not implemented"; return nil }

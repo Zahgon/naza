@@ -10,21 +10,13 @@ package slicebytepool
 
 var defaultPool SliceBytePool
 
-func Get(size int) []byte {
-	return defaultPool.Get(size)
-}
+func Get(size int) []byte { _ = "STUB: not implemented"; return nil }
 
-func Put(buf []byte) {
-	defaultPool.Put(buf)
-}
+func Put(buf []byte) { _ = "STUB: not implemented"; return }
 
-func RetrieveStatus() Status {
-	return defaultPool.RetrieveStatus()
-}
+func RetrieveStatus() Status { _ = "STUB: not implemented"; return *new(Status) }
 
-func Init(strategy Strategy) {
-	defaultPool = NewSliceBytePool(strategy)
-}
+func Init(strategy Strategy) { _ = "STUB: not implemented"; return }
 
 func init() {
 	Init(StrategyMultiSlicePoolBucket)

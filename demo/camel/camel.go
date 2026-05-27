@@ -10,8 +10,6 @@ package main
 
 import (
 	"bytes"
-	"flag"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -165,96 +163,19 @@ func main() {
 }
 
 // 是否大写字母
-func isCap(c byte) bool {
-	return c >= 'A' && c <= 'Z'
-}
+func isCap(c byte) bool { _ = "STUB: not implemented"; return false }
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
+func min(a, b int) int { _ = "STUB: not implemented"; return 0 }
 
 // 有连续大写的地方高亮显示
-func highlightSerialCap(line []byte) []byte {
-	var ret []byte
-	var cache []byte
-	for i := range line {
-		if isCap(line[i]) {
-			cache = append(cache, line[i])
-		} else {
-			if cache != nil {
-				if len(cache) > 1 {
-					ret = append(ret, []byte("\033[22;31m")...)
-				}
-				ret = append(ret, cache...)
-				if len(cache) > 1 {
-					ret = append(ret, []byte("\033[0m")...)
-				}
-				cache = nil
-			}
-			ret = append(ret, line[i])
-		}
-	}
-	if cache != nil {
-		if len(cache) > 1 {
-			ret = append(ret, []byte("\033[22;31m")...)
-		}
-		ret = append(ret, cache...)
-		if len(cache) > 1 {
-			ret = append(ret, []byte("\033[0m")...)
-		}
-	}
-
-	return ret
-}
+func highlightSerialCap(line []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // 一段检查文件修改后和修改前的逻辑，修改是否符合预期
-func checkModFile(path string, content []byte) {
-	beforeModPath := "x"
-	afterModPath := "x"
+func checkModFile(path string, content []byte) { _ = "STUB: not implemented"; return }
 
-	ignFileList := []string{
-		"pkg/rtmp/server_session.go",
-		"pkg/base/websocket.go",
-		"pkg/rtsp/client_command_session.go",
-	}
-	for _, f := range ignFileList {
-		if strings.HasSuffix(path, f) {
-			return
-		}
-	}
-	beforeModFilename := strings.ReplaceAll(path, afterModPath, beforeModPath)
-	beforeModContent, err := ioutil.ReadFile(beforeModFilename)
-	nazalog.Assert(nil, err)
+// 理论上，大部分修改，不影响文件大小
 
-	// 理论上，大部分修改，不影响文件大小
-	if len(content) != len(beforeModContent) {
-		nazalog.Errorf("file size not match. path=%s, len(b=%d, a=%d)", path, len(content), len(beforeModContent))
-	}
+// 不管大小是否相等，取最小值，逐个字节比较内容
+// 理论上，大部分修改，要么是相等，要么是将新内容从小写转换回大写就相等
 
-	notEqualFlag := false
-	// 不管大小是否相等，取最小值，逐个字节比较内容
-	// 理论上，大部分修改，要么是相等，要么是将新内容从小写转换回大写就相等
-	for i := 0; i < min(len(content), len(beforeModContent)); i++ {
-		if content[i] != beforeModContent[i] && content[i]-32 != beforeModContent[i] {
-			nazalog.Errorf("-----a-----\n%s\n-----b-----\n%s", string(content[i:i+128]), string(beforeModContent[i:i+128]))
-			notEqualFlag = true
-			break
-		}
-	}
-	if notEqualFlag {
-		nazalog.Errorf("%s", path)
-	}
-}
-
-func parseFlag() string {
-	dir := flag.String("d", "", "dir of source")
-	flag.Parse()
-	if *dir == "" {
-		flag.Usage()
-		os.Exit(1)
-	}
-	return *dir
-}
+func parseFlag() string { _ = "STUB: not implemented"; return "" }

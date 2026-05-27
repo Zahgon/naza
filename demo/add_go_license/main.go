@@ -10,11 +10,8 @@ package main
 
 import (
 	"bytes"
-	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/q191201771/naza/pkg/filebatch"
@@ -63,22 +60,6 @@ func main() {
 	nazalog.Infof("count. mod=%d, skip=%d", modCount, skipCount)
 }
 
-func achieveRepo(root string) string {
-	content, err := ioutil.ReadFile(filepath.Join(root, "go.mod"))
-	nazalog.Assert(nil, err)
-	lines := bytes.Split(content, []byte{'\n'})
-	repo := bytes.TrimPrefix(lines[0], []byte("module "))
-	return string(bytes.TrimSpace(repo))
-}
+func achieveRepo(root string) string { _ = "STUB: not implemented"; return "" }
 
-func parseFlag() (string, string, string) {
-	dir := flag.String("d", "", "dir of repo")
-	name := flag.String("n", "", "user name")
-	email := flag.String("e", "", "user email")
-	flag.Parse()
-	if *dir == "" || *name == "" || *email == "" {
-		flag.Usage()
-		os.Exit(1)
-	}
-	return *dir, *name, *email
-}
+func parseFlag() (string, string, string) { _ = "STUB: not implemented"; return "", "", "" }

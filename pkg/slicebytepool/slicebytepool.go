@@ -28,79 +28,14 @@ type statusAtomic struct {
 	sizeBytes nazaatomic.Int64
 }
 
-func (bp *sliceBytePool) Get(size int) []byte {
-	bp.status.getCount.Increment()
+func (bp *sliceBytePool) Get(size int) []byte { _ = "STUB: not implemented"; return nil }
 
-	ss := up2power(size)
-	if ss < minSize {
-		ss = minSize
-	}
-	bucket := bp.capToFreeBucket[ss]
+func (bp *sliceBytePool) Put(buf []byte) { _ = "STUB: not implemented"; return }
 
-	buf := bucket.Get(size)
-	if buf == nil {
-		buf = make([]byte, size, ss)
-		return buf
-	}
-
-	bp.status.hitCount.Increment()
-	bp.status.sizeBytes.Sub(int64(cap(buf)))
-	return buf
-}
-
-func (bp *sliceBytePool) Put(buf []byte) {
-	c := cap(buf)
-	bp.status.putCount.Increment()
-	bp.status.sizeBytes.Add(int64(c))
-
-	size := down2power(c)
-	if size < minSize {
-		size = minSize
-	}
-
-	bucket := bp.capToFreeBucket[size]
-
-	bucket.Put(buf)
-}
-
-func (bp *sliceBytePool) RetrieveStatus() Status {
-	return Status{
-		getCount:  bp.status.getCount.Load(),
-		putCount:  bp.status.putCount.Load(),
-		hitCount:  bp.status.hitCount.Load(),
-		sizeBytes: bp.status.sizeBytes.Load(),
-	}
-}
+func (bp *sliceBytePool) RetrieveStatus() Status { _ = "STUB: not implemented"; return *new(Status) }
 
 // @return 范围为 [2, 4, 8, 16, ..., 1073741824]，如果大于等于1073741824，则直接返回n
-func up2power(n int) int {
-	if n >= maxSize {
-		return n
-	}
-
-	var i uint32
-	for ; n > (2 << i); i++ {
-	}
-	return 2 << i
-}
+func up2power(n int) int { _ = "STUB: not implemented"; return 0 }
 
 // @return 范围为 [2, 4, 8, 16, ..., 1073741824]
-func down2power(n int) int {
-	if n < 2 {
-		return 2
-	} else if n >= maxSize {
-		return maxSize
-	}
-
-	var i uint32
-	for {
-		nn := 2 << i
-		if n > nn {
-			i++
-		} else if n == nn {
-			return n
-		} else if n < nn {
-			return 2 << (i - 1)
-		}
-	}
-}
+func down2power(n int) int { _ = "STUB: not implemented"; return 0 }

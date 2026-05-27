@@ -10,7 +10,6 @@ package ratelimit
 
 import (
 	"errors"
-	"fmt"
 	"sync"
 	"time"
 
@@ -36,89 +35,30 @@ type TokenBucket struct {
 // @param prodTokenIntervalMs: 生产令牌的时间间隔，单位毫秒
 // @param prodTokenNumEveryInterval: 每次生产多少个令牌
 func NewTokenBucket(capacity int, prodTokenIntervalMs int, prodTokenNumEveryInterval int) *TokenBucket {
-	tb := &TokenBucket{
-		capacity:                  capacity,
-		prodTokenInterval:         time.Duration(time.Duration(prodTokenIntervalMs) * time.Millisecond),
-		prodTokenNumEveryInterval: prodTokenNumEveryInterval,
-	}
-	tb.cond = sync.NewCond(&tb.mu)
-	tb.asyncProdToken()
-	return tb
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (tb *TokenBucket) TryAquire() error {
-	return tb.TryAquireWithNum(1)
-}
+func (tb *TokenBucket) TryAquire() error { _ = "STUB: not implemented"; return nil }
 
-func (tb *TokenBucket) WaitUntilAquire() {
-	tb.WaitUntilAquireWithNum(1)
-}
+func (tb *TokenBucket) WaitUntilAquire() { _ = "STUB: not implemented"; return }
 
 // 尝试获取相应数量的令牌，获取成功返回nil，获取失败返回ErrTokenNotEnough
 // 如果获取失败，上层可自由选择多久后重试或丢弃本次任务
-func (tb *TokenBucket) TryAquireWithNum(num int) error {
-	tb.checkAquireNum(num)
-
-	tb.mu.Lock()
-	defer tb.mu.Unlock()
-	if tb.available >= num {
-		tb.available -= num
-		return nil
-	}
-
-	return ErrTokenNotEnough
-}
+func (tb *TokenBucket) TryAquireWithNum(num int) error { _ = "STUB: not implemented"; return nil }
 
 // 阻塞直到获取到相应数量的令牌
-func (tb *TokenBucket) WaitUntilAquireWithNum(num int) {
-	tb.checkAquireNum(num)
+func (tb *TokenBucket) WaitUntilAquireWithNum(num int) { _ = "STUB: not implemented"; return }
 
-	for {
-		tb.mu.Lock()
-		if tb.available >= num {
-			tb.available -= num
-			tb.mu.Unlock()
-			return
-		}
-
-		// 等待下次令牌生产时被唤醒
-		// wait的内部会将自身添加到事件监听队列中然后释放锁，当接收到事件时，内部会重新获取锁然后返回
-		tb.cond.Wait()
-		tb.mu.Unlock()
-	}
-}
+// 等待下次令牌生产时被唤醒
+// wait的内部会将自身添加到事件监听队列中然后释放锁，当接收到事件时，内部会重新获取锁然后返回
 
 // 销毁令牌桶
-func (tb *TokenBucket) Dispose() {
-	tb.disposeFlag.Store(true)
-}
+func (tb *TokenBucket) Dispose() { _ = "STUB: not implemented"; return }
 
-func (tb *TokenBucket) asyncProdToken() {
-	go func() {
-		t := time.NewTicker(tb.prodTokenInterval)
-		defer t.Stop()
-		for {
-			if tb.disposeFlag.Load() {
-				break
-			}
-			select {
-			case <-t.C:
-				tb.mu.Lock()
-				tb.available += tb.prodTokenNumEveryInterval
-				if tb.available > tb.capacity {
-					tb.available = tb.capacity
-				}
-				// It is allowed but not required for the caller to hold c.L
-				// during the call.
-				tb.cond.Broadcast()
-				tb.mu.Unlock()
-			}
-		}
-	}()
-}
+func (tb *TokenBucket) asyncProdToken() { _ = "STUB: not implemented"; return }
 
-func (tb *TokenBucket) checkAquireNum(num int) {
-	if num > tb.capacity {
-		panic(fmt.Sprintf("aquire num should not bigger than capacity. num=%d, capacity=%d", num, tb.capacity))
-	}
-}
+// It is allowed but not required for the caller to hold c.L
+// during the call.
+
+func (tb *TokenBucket) checkAquireNum(num int) { _ = "STUB: not implemented"; return }

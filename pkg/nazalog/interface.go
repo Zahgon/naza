@@ -154,28 +154,7 @@ const (
 	LevelLogNothing
 )
 
-func (l Level) ReadableString() string {
-	switch l {
-	case LevelTrace:
-		return "LevelTrace"
-	case LevelDebug:
-		return "LevelDebug"
-	case LevelInfo:
-		return "LevelInfo"
-	case LevelWarn:
-		return "LevelWarn"
-	case LevelError:
-		return "LevelError"
-	case LevelFatal:
-		return "LevelFatal"
-	case LevelPanic:
-		return "LevelPanic"
-	case LevelLogNothing:
-		return "LevelLogNothing"
-	default:
-		return "unknown"
-	}
-}
+func (l Level) ReadableString() string { _ = "STUB: not implemented"; return "" }
 
 type AssertBehavior uint8
 
@@ -186,21 +165,11 @@ const (
 	AssertPanic
 )
 
-func (a AssertBehavior) ReadableString() string {
-	switch a {
-	case AssertError:
-		return "AssertError"
-	case AssertFatal:
-		return "AssertFatal"
-	case AssertPanic:
-		return "AssertPanic"
-	default:
-		return "unknown"
-	}
-}
+func (a AssertBehavior) ReadableString() string { _ = "STUB: not implemented"; return "" }
 
 type ModOption func(option *Option)
 
 func New(modOptions ...ModOption) (Logger, error) {
-	return newLogger(modOptions...)
+	_ = "STUB: not implemented"
+	return *new(Logger), nil
 }

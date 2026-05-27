@@ -14,21 +14,7 @@ import (
 )
 
 // 把 sort.Search 拷过来，加些单步日志
-func SearchWithLog(n int, f func(int) bool) int {
-	i, j := 0, n
-	for i < j {
-		h := int(uint(i+j) >> 1)
-		fmt.Printf("i=%d, j=%d, h=%d", i, j, h)
-		if !f(h) {
-			fmt.Println(" not match.")
-			i = h + 1
-		} else {
-			fmt.Println("match.")
-			j = h
-		}
-	}
-	return i
-}
+func SearchWithLog(n int, f func(int) bool) int { _ = "STUB: not implemented"; return 0 }
 
 func main() {
 	const key = 3

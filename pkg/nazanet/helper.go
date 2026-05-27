@@ -9,19 +9,15 @@
 package nazanet
 
 import (
-	"fmt"
 	"net"
 )
 
 func listenUdpWithPort(port uint16) (*net.UDPConn, error) {
-	addr := fmt.Sprintf(":%d", port)
-	return listenUdpWithAddr(addr)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func listenUdpWithAddr(addr string) (*net.UDPConn, error) {
-	udpAddr, err := net.ResolveUDPAddr(udpNetwork, addr)
-	if err != nil {
-		return nil, err
-	}
-	return net.ListenUDP(udpNetwork, udpAddr)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

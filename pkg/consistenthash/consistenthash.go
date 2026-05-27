@@ -11,9 +11,6 @@ package consistenthash
 import (
 	"errors"
 	"hash/crc32"
-	"math"
-	"sort"
-	"strconv"
 )
 
 var ErrIsEmpty = errors.New("naza.consistenthash: is empty")
@@ -57,16 +54,8 @@ type ModOption func(option *Option)
 //	  }
 //	})
 func New(dups int, modOptions ...ModOption) ConsistentHash {
-	option := defaultOption
-	for _, fn := range modOptions {
-		fn(&option)
-	}
-
-	return &consistentHash{
-		point2node: make(map[uint32]string),
-		dups:       dups,
-		option:     option,
-	}
+	_ = "STUB: not implemented"
+	return *new(ConsistentHash)
 }
 
 type consistentHash struct {
@@ -76,79 +65,23 @@ type consistentHash struct {
 	option     Option
 }
 
-func (ch *consistentHash) Add(nodes ...string) {
-	for _, node := range nodes {
-		for i := 0; i < ch.dups; i++ {
-			point := ch.hash2point(virtualKey(node, i))
-			ch.point2node[point] = node
-			ch.points = append(ch.points, point)
-		}
-	}
-	sortSlice(ch.points)
-}
+func (ch *consistentHash) Add(nodes ...string) { _ = "STUB: not implemented"; return }
 
-func (ch *consistentHash) Del(nodes ...string) {
-	for _, node := range nodes {
-		for i := 0; i < ch.dups; i++ {
-			point := ch.hash2point(virtualKey(node, i))
-			delete(ch.point2node, point)
-		}
-	}
-
-	ch.points = nil
-	for k := range ch.point2node {
-		ch.points = append(ch.points, k)
-	}
-	sortSlice(ch.points)
-}
+func (ch *consistentHash) Del(nodes ...string) { _ = "STUB: not implemented"; return }
 
 func (ch *consistentHash) Get(key string) (node string, err error) {
-	if len(ch.points) == 0 {
-		return "", ErrIsEmpty
-	}
-
-	point := ch.hash2point(key)
-	// 从数组中找出满足 point 值 >= key 所对应 point 值的最小的元素
-	index := sort.Search(len(ch.points), func(i int) bool {
-		return ch.points[i] >= point
-	})
-
-	if index == len(ch.points) {
-		index = 0
-	}
-
-	return ch.point2node[ch.points[index]], nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
-func (ch *consistentHash) Nodes() map[string]uint64 {
-	if len(ch.points) == 0 {
-		return nil
-	}
-	ret := make(map[string]uint64)
-	prev := uint64(0)
-	for _, point := range ch.points {
-		node := ch.point2node[point]
-		ret[node] = ret[node] + uint64(point) - prev
-		prev = uint64(point)
-	}
+// 从数组中找出满足 point 值 >= key 所对应 point 值的最小的元素
 
-	// 最后一个 node 到终点位置的 point 都归入第一个 node
-	point := ch.points[len(ch.points)-1]
-	node := ch.point2node[point]
-	ret[node] = ret[node] + uint64(math.MaxUint32-point+1)
-	return ret
-}
+func (ch *consistentHash) Nodes() map[string]uint64 { _ = "STUB: not implemented"; return nil }
 
-func (ch *consistentHash) hash2point(key string) uint32 {
-	return ch.option.hfn([]byte(key))
-}
+// 最后一个 node 到终点位置的 point 都归入第一个 node
 
-func virtualKey(node string, index int) string {
-	return node + strconv.Itoa(index)
-}
+func (ch *consistentHash) hash2point(key string) uint32 { _ = "STUB: not implemented"; return 0 }
 
-func sortSlice(a []uint32) {
-	sort.Slice(a, func(i, j int) bool {
-		return a[i] < a[j]
-	})
-}
+func virtualKey(node string, index int) string { _ = "STUB: not implemented"; return "" }
+
+func sortSlice(a []uint32) { _ = "STUB: not implemented"; return }

@@ -10,9 +10,7 @@ package defertaskthread
 
 var thread DeferTaskThread
 
-func Go(deferMs int, task TaskFn, param ...interface{}) {
-	thread.Go(deferMs, task, param...)
-}
+func Go(deferMs int, task TaskFn, param ...interface{}) { _ = "STUB: not implemented"; return }
 
 func init() {
 	thread = NewDeferTaskThread()

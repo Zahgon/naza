@@ -9,11 +9,6 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"strconv"
-	"strings"
-
 	"github.com/q191201771/naza/pkg/nazalog"
 )
 
@@ -33,72 +28,22 @@ type ThreadInfo struct {
 	RawStackLines string
 }
 
-func NewPstackInfo(filename string) PstackInfo {
-	var tis []ThreadInfo
+func NewPstackInfo(filename string) PstackInfo { _ = "STUB: not implemented"; return *new(PstackInfo) }
 
-	contents, err := ioutil.ReadFile(filename)
-	nazalog.Assert(nil, err)
-	content := string(contents)
-	lines := strings.Split(content, "\n")
-	//nazalog.Debugf("len(lines)=%d", len(lines))
+//nazalog.Debugf("len(lines)=%d", len(lines))
 
-	var ti *ThreadInfo
-	for _, line := range lines {
-		if strings.HasPrefix(line, "Thread") {
-			if ti != nil {
-				tis = append(tis, *ti)
-			}
-			ti = &ThreadInfo{}
-
-			//nazalog.Debugf("%s", line)
-			ti.RawLine = line
-			ti.Num, ti.P, ti.Id, err = parseThreadLine(line)
-			nazalog.Assert(nil, err)
-			continue
-		}
-
-		ti.RawStackLines += line + "\n"
-	}
-	if ti != nil {
-		tis = append(tis, *ti)
-	}
-	nazalog.Debugf("len(tis)=%d", len(tis))
-
-	tim := make(map[string]ThreadInfo)
-	for _, ti := range tis {
-		tim[ti.Uk()] = ti
-	}
-
-	return PstackInfo{
-		tis: tis,
-		tim: tim,
-	}
-}
+//nazalog.Debugf("%s", line)
 
 func (pi *PstackInfo) Find(uk string) (ThreadInfo, bool) {
-	ti, exist := pi.tim[uk]
-	return ti, exist
+	_ = "STUB: not implemented"
+	return *new(ThreadInfo), false
 }
 
-func (ti *ThreadInfo) Uk() string {
-	return fmt.Sprintf("%s_%d", ti.P, ti.Id)
-}
+func (ti *ThreadInfo) Uk() string { _ = "STUB: not implemented"; return "" }
 
 func parseThreadLine(line string) (num int, p string, id int, err error) {
-	p1 := strings.Index(line, "Thread")
-	p2 := strings.Index(line, "(Thread")
-	num, err = strconv.Atoi(line[p1+7 : p2-1])
-	if err != nil {
-		return
-	}
-
-	p3 := strings.Index(line, "(LWP")
-	p = line[p2+8 : p3-1]
-
-	p4 := strings.Index(line, "))")
-	id, err = strconv.Atoi(line[p3+5 : p4-1])
-
-	return
+	_ = "STUB: not implemented"
+	return 0, "", 0, nil
 }
 
 func main() {

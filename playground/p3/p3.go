@@ -10,8 +10,6 @@ package main
 
 import (
 	"fmt"
-	"sync"
-	"sync/atomic"
 	"time"
 )
 
@@ -29,53 +27,9 @@ type WithPadding struct {
 
 var num = 1000 * 1000
 
-func OriginParallel() {
-	var v Origin
+func OriginParallel() { _ = "STUB: not implemented"; return }
 
-	var wg sync.WaitGroup
-	wg.Add(2)
-
-	go func() {
-		for i := 0; i < num; i++ {
-			atomic.AddUint64(&v.a, 1)
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		for i := 0; i < num; i++ {
-			atomic.AddUint64(&v.b, 1)
-		}
-		wg.Done()
-	}()
-
-	wg.Wait()
-	_ = v.a + v.b
-}
-
-func WithPaddingParallel() {
-	var v WithPadding
-
-	var wg sync.WaitGroup
-	wg.Add(2)
-
-	go func() {
-		for i := 0; i < num; i++ {
-			atomic.AddUint64(&v.a, 1)
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		for i := 0; i < num; i++ {
-			atomic.AddUint64(&v.b, 1)
-		}
-		wg.Done()
-	}()
-
-	wg.Wait()
-	_ = v.a + v.b
-}
+func WithPaddingParallel() { _ = "STUB: not implemented"; return }
 
 func main() {
 	var b time.Time

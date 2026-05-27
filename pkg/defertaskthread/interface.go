@@ -16,6 +16,4 @@ type DeferTaskThread interface {
 	Go(deferMs int, task TaskFn, param ...interface{})
 }
 
-func NewDeferTaskThread() DeferTaskThread {
-	return &deferTaskThread{}
-}
+func NewDeferTaskThread() DeferTaskThread { _ = "STUB: not implemented"; return *new(DeferTaskThread) }

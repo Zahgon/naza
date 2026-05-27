@@ -29,46 +29,20 @@ var defaultSharedSliceByteOption = SharedSliceByteOption{
 type ModSharedSliceByteOption func(option *SharedSliceByteOption)
 
 func WithPool(pool SliceBytePool) ModSharedSliceByteOption {
-	return func(option *SharedSliceByteOption) {
-		option.pool = pool
-	}
+	_ = "STUB: not implemented"
+	return *new(ModSharedSliceByteOption)
 }
 
 func NewSharedSliceByte(size int, modOptions ...ModSharedSliceByteOption) *SharedSliceByte {
-	option := defaultSharedSliceByteOption
-	for _, fn := range modOptions {
-		fn(&option)
-	}
-
-	var ssb SharedSliceByte
-	ssb.Core = option.pool.Get(size)
-	ssb.pool = option.pool
-	ssb.count.Store(1)
-	return &ssb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func WrapSharedSliceByte(b []byte, modOptions ...ModSharedSliceByteOption) *SharedSliceByte {
-	option := SharedSliceByteOption{
-		pool: defaultPool,
-	}
-	for _, fn := range modOptions {
-		fn(&option)
-	}
-
-	var ssb SharedSliceByte
-	ssb.Core = b
-	ssb.pool = option.pool
-	ssb.count.Store(1)
-	return &ssb
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (ssb *SharedSliceByte) Ref() *SharedSliceByte {
-	ssb.count.Increment()
-	return ssb
-}
+func (ssb *SharedSliceByte) Ref() *SharedSliceByte { _ = "STUB: not implemented"; return nil }
 
-func (ssb *SharedSliceByte) ReleaseIfNeeded() {
-	if ssb.count.Decrement() == 0 {
-		ssb.pool.Put(ssb.Core)
-	}
-}
+func (ssb *SharedSliceByte) ReleaseIfNeeded() { _ = "STUB: not implemented"; return }

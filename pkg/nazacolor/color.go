@@ -8,8 +8,6 @@
 
 package nazacolor
 
-import "fmt"
-
 // 示例：  \033[22;31;42mHello\033[0m
 // \033[    固定前缀
 // 22       格式，非出题
@@ -79,36 +77,25 @@ const (
 
 // Wrap 分别设置样式，前景色(字体颜色)，背景色
 func Wrap(v string, format Format, fg FgColor, bg BgColor) string {
-	return fmt.Sprintf("%s%d;%d;%dm%s%s", prefix, format, fg, bg, v, suffix)
+	_ = "STUB: not implemented"
+	return ""
 }
 
 // WrapWithFgColor 只设置前景色(字体颜色)
-func WrapWithFgColor(v string, fg FgColor) string {
-	return fmt.Sprintf("%s%d;%dm%s%s", prefix, FormatNonBold, fg, v, suffix)
-}
+func WrapWithFgColor(v string, fg FgColor) string { _ = "STUB: not implemented"; return "" }
 
 // WrapBlack 将前景色(字体颜色)设置为黑色
-func WrapBlack(v string) string {
-	return WrapWithFgColor(v, FgBlack)
-}
+func WrapBlack(v string) string { _ = "STUB: not implemented"; return "" }
 
 // WrapRed 将前景色(字体颜色)设置为红色
-func WrapRed(v string) string {
-	return WrapWithFgColor(v, FgRed)
-}
+func WrapRed(v string) string { _ = "STUB: not implemented"; return "" }
 
-func WrapGreen(v string) string {
-	return WrapWithFgColor(v, FgGreen)
-}
-func WrapYellow(v string) string {
-	return WrapWithFgColor(v, FgYellow)
-}
-func WrapBlue(v string) string {
-	return WrapWithFgColor(v, FgBlue)
-}
-func WrapCyan(v string) string {
-	return WrapWithFgColor(v, FgCyan)
-}
-func WrapWhite(v string) string {
-	return WrapWithFgColor(v, FgWhite)
-}
+func WrapGreen(v string) string { _ = "STUB: not implemented"; return "" }
+
+func WrapYellow(v string) string { _ = "STUB: not implemented"; return "" }
+
+func WrapBlue(v string) string { _ = "STUB: not implemented"; return "" }
+
+func WrapCyan(v string) string { _ = "STUB: not implemented"; return "" }
+
+func WrapWhite(v string) string { _ = "STUB: not implemented"; return "" }

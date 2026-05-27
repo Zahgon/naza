@@ -11,9 +11,6 @@
 
 package nazalog
 
-func (l *logger) writeLevelStringIfNeeded(level Level) {
-	if l.core.option.LevelFlag {
-		// windows系统不用写带颜色的日志级别字段
-		l.core.buf.WriteString(levelToString[level])
-	}
-}
+func (l *logger) writeLevelStringIfNeeded(level Level) { _ = "STUB: not implemented"; return }
+
+// windows系统不用写带颜色的日志级别字段

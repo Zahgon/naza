@@ -32,29 +32,9 @@ type Writer struct {
 	B     bytes.Buffer
 }
 
-func NewWriter(t WriterType) *Writer {
-	return &Writer{
-		t: t,
-	}
-}
+func NewWriter(t WriterType) *Writer { _ = "STUB: not implemented"; return nil }
 
 // 为某些写操作指定特定的类型，次数从 0 开始计数
-func (w *Writer) SetSpecificType(ts map[uint32]WriterType) {
-	w.ts = ts
-}
+func (w *Writer) SetSpecificType(ts map[uint32]WriterType) { _ = "STUB: not implemented"; return }
 
-func (w *Writer) Write(b []byte) (int, error) {
-	t, exist := w.ts[w.count]
-	w.count++
-	if !exist {
-		t = w.t
-	}
-	switch t {
-	case WriterTypeDoNothing:
-		return len(b), nil
-	case WriterTypeReturnError:
-		return 0, ErrFakeWriter
-	}
-
-	return w.B.Write(b)
-}
+func (w *Writer) Write(b []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }

@@ -8,14 +8,10 @@
 
 package defertaskthread
 
-import "time"
-
 type deferTaskThread struct {
 }
 
 func (d *deferTaskThread) Go(deferMs int, task TaskFn, param ...interface{}) {
-	go func() {
-		time.Sleep(time.Duration(deferMs) * time.Millisecond)
-		task(param...)
-	}()
+	_ = "STUB: not implemented"
+	return
 }

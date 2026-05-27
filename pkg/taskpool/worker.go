@@ -13,33 +13,10 @@ type worker struct {
 	p        *pool
 }
 
-func NewWorker(p *pool) *worker {
-	return &worker{
-		taskChan: make(chan taskWrapper, 1),
-		p:        p,
-	}
-}
+func NewWorker(p *pool) *worker { _ = "STUB: not implemented"; return nil }
 
-func (w *worker) Start() {
-	go func() {
-		for {
-			task := <-w.taskChan
-			if task.disposeFlag {
-				w.p.onDispose(w)
-				break
-			}
-			task.taskFn(task.param...)
-			w.p.onIdle(w)
-		}
-	}()
-}
+func (w *worker) Start() { _ = "STUB: not implemented"; return }
 
-func (w *worker) Stop() {
-	w.taskChan <- taskWrapper{
-		disposeFlag: true,
-	}
-}
+func (w *worker) Stop() { _ = "STUB: not implemented"; return }
 
-func (w *worker) Go(t taskWrapper) {
-	w.taskChan <- t
-}
+func (w *worker) Go(t taskWrapper) { _ = "STUB: not implemented"; return }

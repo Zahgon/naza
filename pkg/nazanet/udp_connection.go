@@ -10,7 +10,6 @@ package nazanet
 
 import (
 	"net"
-	"time"
 )
 
 // TODO(chef): [opt] 增加函数，可以返回内部的本地地址 202208
@@ -59,42 +58,13 @@ type UdpConnection struct {
 type ModUdpConnectionOption func(option *UdpConnectionOption)
 
 func NewUdpConnection(modOptions ...ModUdpConnectionOption) (*UdpConnection, error) {
-	var err error
-
-	c := &UdpConnection{}
-	c.option = defaultOption
-	for _, fn := range modOptions {
-		fn(&c.option)
-	}
-	if c.option.RAddr != "" {
-		if c.raddrFromOption, err = net.ResolveUDPAddr(udpNetwork, c.option.RAddr); err != nil {
-			return nil, err
-		}
-	}
-	if c.option.Conn != nil {
-		return c, nil
-	}
-
-	if c.option.Conn, err = listenUdpWithAddr(c.option.LAddr); err != nil {
-		return nil, err
-	}
-	return c, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (c *UdpConnection) SetReadBuffer(bufSize int) error {
-	err := c.option.Conn.SetReadBuffer(bufSize)
-	if err != nil {
-		c.Dispose()
-	}
-	return err
-}
-func (c *UdpConnection) SetWriteBuffer(bufSize int) error {
-	err := c.option.Conn.SetWriteBuffer(bufSize)
-	if err != nil {
-		c.Dispose()
-	}
-	return err
-}
+func (c *UdpConnection) SetReadBuffer(bufSize int) error { _ = "STUB: not implemented"; return nil }
+
+func (c *UdpConnection) SetWriteBuffer(bufSize int) error { _ = "STUB: not implemented"; return nil }
 
 // RunLoop 阻塞直至Read发生错误或上层回调函数返回false
 //
@@ -102,61 +72,21 @@ func (c *UdpConnection) SetWriteBuffer(bufSize int) error {
 //
 // 注意，回调存在err!=nil(*net.OpError, Err={error | poll.errNetClosing} use of closed network connection), len==0的情况
 func (c *UdpConnection) RunLoop(onRead OnReadUdpPacket) error {
-	var b []byte
-	if !c.option.AllocEachRead {
-		b = make([]byte, c.option.MaxReadPacketSize)
-	}
-	for {
-		if c.option.AllocEachRead {
-			b = make([]byte, c.option.MaxReadPacketSize)
-		}
-		var n int
-		var err error
-		n, c.raddrFromRead, err = c.option.Conn.ReadFromUDP(b)
-		if keepRunning := onRead(b[:n], c.raddrFromRead, err); !keepRunning {
-			if err == nil {
-				return c.Dispose()
-			}
-		}
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ReadWithTimeout 直接读取数据，不使用RunLoop
 func (c *UdpConnection) ReadWithTimeout(timeoutMs int) ([]byte, *net.UDPAddr, error) {
-	if timeoutMs > 0 {
-		if err := c.option.Conn.SetReadDeadline(time.Now().Add(time.Duration(timeoutMs) * time.Millisecond)); err != nil {
-			return nil, nil, err
-		}
-	}
-	b := make([]byte, c.option.MaxReadPacketSize)
-	n, raddr, err := c.option.Conn.ReadFromUDP(b)
-	if err != nil {
-		return nil, nil, err
-	}
-	return b[:n], raddr, nil
+	_ = "STUB: not implemented"
+	return nil, nil, nil
 }
 
-func (c *UdpConnection) Write(b []byte) error {
-	if c.raddrFromOption != nil {
-		_, err := c.option.Conn.WriteToUDP(b, c.raddrFromOption)
-		return err
-	}
-	if c.raddrFromRead != nil {
-		_, err := c.option.Conn.WriteToUDP(b, c.raddrFromRead)
-		return err
-	}
-
-	return ErrNazaNet
-}
+func (c *UdpConnection) Write(b []byte) error { _ = "STUB: not implemented"; return nil }
 
 func (c *UdpConnection) Write2Addr(b []byte, ruaddr *net.UDPAddr) error {
-	_, err := c.option.Conn.WriteToUDP(b, ruaddr)
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (c *UdpConnection) Dispose() error {
-	return c.option.Conn.Close()
-}
+func (c *UdpConnection) Dispose() error { _ = "STUB: not implemented"; return nil }

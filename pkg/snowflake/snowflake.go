@@ -11,7 +11,6 @@ package snowflake
 import (
 	"errors"
 	"sync"
-	"time"
 )
 
 var (
@@ -55,107 +54,35 @@ type ModOption func(option *Option)
 // dataCenterId 和 workerId 的取值范围取决于 DataCenterIdBits 和 WorkerIdBits
 // 假设 DataCenterIdBits 为 5，则 dataCenterId 取值范围为 [0, 32]
 func New(dataCenterId int, workerId int, modOptions ...ModOption) (*Node, error) {
-	option := defaultOption
-	for _, fn := range modOptions {
-		fn(&option)
-	}
-
-	if err := validate(dataCenterId, workerId, option); err != nil {
-		return nil, err
-	}
-
-	return &Node{
-		dataCenterId:      int64(dataCenterId),
-		workerId:          int64(workerId),
-		option:            option,
-		seqMask:           uint32(bitsToMax(option.SequenceBits)),
-		workerIdShift:     uint32(option.SequenceBits),
-		dataCenterIdShift: uint32(option.SequenceBits + option.WorkerIdBits),
-		timestampShift:    uint32(option.SequenceBits + option.WorkerIdBits + option.DataCenterIdBits),
-		lastTs:            -1,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (n *Node) Gen(nowUnixMs ...int64) (int64, error) {
-	n.mu.Lock()
-	defer n.mu.Unlock()
+func (n *Node) Gen(nowUnixMs ...int64) (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
-	// 当前 Unix 时间戳可由外部传入
-	var now int64
-	if len(nowUnixMs) == 0 {
-		now = time.Now().UnixNano() / 1e6
-	} else {
-		now = nowUnixMs[0]
-	}
+// 当前 Unix 时间戳可由外部传入
 
-	// 时间戳回退，返回错误
-	if now < n.lastTs {
-		return -1, ErrGen
-	}
+// 时间戳回退，返回错误
 
-	// 时间戳相同时，使用递增序号解决冲突
-	if now == n.lastTs {
-		n.seq = (n.seq + 1) & n.seqMask
-		// 递增序号翻转为 0，表示该时间戳下的序号已经全部用完，阻塞等待系统时间增长
-		if n.seq == 0 {
-			for now <= n.lastTs {
-				now = time.Now().UnixNano() / 1e6
-			}
-		}
-	} else {
-		n.seq = 0
-	}
-	n.lastTs = now
+// 时间戳相同时，使用递增序号解决冲突
 
-	// 如果保证只返回正数，则生成的 ID 的最高位，也即时间戳的最高位保持为 0
-	ts := now - n.option.Twepoch
-	if n.option.AlwaysPositive {
-		ts = clearBit(ts, 63-n.timestampShift)
-	}
-	ts <<= n.timestampShift
+// 递增序号翻转为 0，表示该时间戳下的序号已经全部用完，阻塞等待系统时间增长
 
-	// 用所有字段组合生成 ID 返回
-	return ts | (n.dataCenterId << n.dataCenterIdShift) | (n.workerId << n.workerIdShift) | int64(n.seq), nil
-}
+// 如果保证只返回正数，则生成的 ID 的最高位，也即时间戳的最高位保持为 0
+
+// 用所有字段组合生成 ID 返回
 
 func validate(dataCenterId int, workerId int, option Option) error {
-	if option.DataCenterIdBits < 0 || option.DataCenterIdBits > 31 {
-		return ErrInitial
-	}
-	if option.WorkerIdBits < 0 || option.WorkerIdBits > 31 {
-		return ErrInitial
-	}
-	if option.SequenceBits < 0 || option.SequenceBits > 31 {
-		return ErrInitial
-	}
-
-	if option.DataCenterIdBits+option.WorkerIdBits+option.SequenceBits >= 64 {
-		return ErrInitial
-	}
-
-	if option.DataCenterIdBits > 0 {
-		if dataCenterId > bitsToMax(option.DataCenterIdBits) {
-			return ErrInitial
-		}
-	}
-	if option.WorkerIdBits > 0 {
-		if workerId > bitsToMax(option.WorkerIdBits) {
-			return ErrInitial
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // 位的数量对应的最大值，该函数也可以叫做 bitsToMask
 func bitsToMax(bits int) int {
+	_ = "STUB: not implemented"
 	// -1 表示所有位都为 1
-	return int(int32(-1) ^ (int32(-1) << uint32(bits)))
+	return 0
 }
 
 // 将 <num> 的第 <index> 设置为 0
-func clearBit(num int64, index uint32) int64 {
-	bit := int64(1 << index)
-	mask := int64(-1) ^ bit
-	return num & mask
-}
+func clearBit(num int64, index uint32) int64 { _ = "STUB: not implemented"; return 0 }

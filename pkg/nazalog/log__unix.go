@@ -11,12 +11,4 @@
 
 package nazalog
 
-func (l *logger) writeLevelStringIfNeeded(level Level) {
-	if l.core.option.LevelFlag {
-		if l.core.console != nil {
-			l.core.buf.WriteString(levelToColorString[level])
-		} else {
-			l.core.buf.WriteString(levelToString[level])
-		}
-	}
-}
+func (l *logger) writeLevelStringIfNeeded(level Level) { _ = "STUB: not implemented"; return }

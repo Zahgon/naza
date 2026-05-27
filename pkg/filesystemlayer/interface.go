@@ -45,13 +45,8 @@ const (
 )
 
 func FslFactory(t FslType) IFileSystemLayer {
-	switch t {
-	case FslTypeDisk:
-		return &FslDisk{}
-	case FslTypeMemory:
-		return NewFslMemory()
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(IFileSystemLayer)
 }
 
 func init() {

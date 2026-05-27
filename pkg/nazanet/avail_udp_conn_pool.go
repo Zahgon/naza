@@ -24,101 +24,43 @@ type AvailUdpConnPool struct {
 }
 
 func NewAvailUdpConnPool(minPort uint16, maxPort uint16) *AvailUdpConnPool {
-	return &AvailUdpConnPool{
-		minPort:  minPort,
-		maxPort:  maxPort,
-		lastPort: minPort,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (a *AvailUdpConnPool) Acquire() (*net.UDPConn, uint16, error) {
-	a.m.Lock()
-	defer a.m.Unlock()
-
-	nTried := 0
-	p := a.lastPort
-	for {
-		// 找了一轮也没有可用的，返回错误
-		if nTried >= int(a.maxPort-a.minPort+1) {
-			return nil, 0, ErrNazaNet
-		}
-
-		nTried++
-		conn, err := listenUdpWithPort(p)
-
-		// 绑定失败，尝试下一个端口
-		if err != nil {
-			p = a.nextPort(p)
-			continue
-		}
-
-		// 绑定成功，更新last，返回结果
-		a.lastPort = a.nextPort(p)
-		return conn, p, nil
-	}
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
+
+// 找了一轮也没有可用的，返回错误
+
+// 绑定失败，尝试下一个端口
+
+// 绑定成功，更新last，返回结果
 
 // 有的业务场景，需要返回两个可用的端口，并且必须是连续的
 // @return 前面的是端口小的，后面的是端口+1的
 func (a *AvailUdpConnPool) Acquire2() (*net.UDPConn, uint16, *net.UDPConn, uint16, error) {
-	a.m.Lock()
-	defer a.m.Unlock()
-
-	nTried := 0
-	p := a.lastPort
-	for {
-		// 找了一轮也没有可用的，返回错误
-		if nTried >= int(a.maxPort-a.minPort+1) {
-			return nil, 0, nil, 0, ErrNazaNet
-		}
-
-		nTried++
-		// 因为第一个端口如果为最大值，那么和第二个端口肯定不是线性连续了
-		if p == a.maxPort {
-			p = a.minPort
-			continue
-		}
-
-		nTried++
-		conn, err := listenUdpWithPort(p)
-
-		// 第一个就绑定失败，尝试下一对端口
-		if err != nil {
-			p = a.nextPort(p + 1)
-			continue
-		}
-
-		// 绑定成功，因为我们需要两个，所以我们还要找第二个
-
-		// 因为前面已经有判断最大值了，所以直接+1
-		conn2, err := listenUdpWithPort(p + 1)
-
-		// 第二个失败了，关闭第一个，然后从第二个的下一个重新尝试
-		if err != nil {
-			_ = conn.Close()
-			p = a.nextPort(p + 1)
-			continue
-		}
-
-		// 绑定成功，更新last，返回结果
-		a.lastPort = a.nextPort(p + 1)
-		return conn, p, conn2, p + 1, nil
-	}
+	_ = "STUB: not implemented"
+	return nil, 0, nil, 0, nil
 }
+
+// 找了一轮也没有可用的，返回错误
+
+// 因为第一个端口如果为最大值，那么和第二个端口肯定不是线性连续了
+
+// 第一个就绑定失败，尝试下一对端口
+
+// 绑定成功，因为我们需要两个，所以我们还要找第二个
+
+// 因为前面已经有判断最大值了，所以直接+1
+
+// 第二个失败了，关闭第一个，然后从第二个的下一个重新尝试
+
+// 绑定成功，更新last，返回结果
 
 // 通过Acquire获取到可用net.UDPConn对象后，将对象关闭，只返回可用的端口
-func (a *AvailUdpConnPool) Peek() (uint16, error) {
-	conn, port, err := a.Acquire()
-	if err == nil {
-		err = conn.Close()
-	}
-	return port, err
-}
+func (a *AvailUdpConnPool) Peek() (uint16, error) { _ = "STUB: not implemented"; return 0, nil }
 
-func (a *AvailUdpConnPool) nextPort(p uint16) uint16 {
-	if p == a.maxPort {
-		return a.minPort
-	}
-
-	return p + 1
-}
+func (a *AvailUdpConnPool) nextPort(p uint16) uint16 { _ = "STUB: not implemented"; return 0 }

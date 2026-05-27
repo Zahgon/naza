@@ -60,25 +60,9 @@ var DefaultCtx = NewCtx()
 
 type ModOption func(option *Option)
 
-func NewCtx(modOptions ...ModOption) *Ctx {
-	option := defaultOption
-	for _, fn := range modOptions {
-		fn(&option)
-	}
-	return &Ctx{
-		option: option,
-	}
-}
+func NewCtx(modOptions ...ModOption) *Ctx { _ = "STUB: not implemented"; return nil }
 
 // NewCtxWith
 //
 // 在`ctx`参数基础上使用`modOptions`生成新的 Ctx
-func NewCtxWith(ctx *Ctx, modOptions ...ModOption) *Ctx {
-	option := ctx.option
-	for _, fn := range modOptions {
-		fn(&option)
-	}
-	return &Ctx{
-		option: option,
-	}
-}
+func NewCtxWith(ctx *Ctx, modOptions ...ModOption) *Ctx { _ = "STUB: not implemented"; return nil }

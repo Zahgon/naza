@@ -8,50 +8,16 @@
 
 package nazahttp
 
-import (
-	"io"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"time"
-)
-
 // TODO(chef): 重命名为GetAll
 //
 // GetHttpFile 获取http文件保存至字节切片
-//
-//
 func GetHttpFile(url string, timeoutMs int) ([]byte, error) {
-	var c http.Client
-	if timeoutMs > 0 {
-		c.Timeout = time.Duration(timeoutMs) * time.Millisecond
-	}
-	resp, err := c.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	return ioutil.ReadAll(resp.Body)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // 获取http文件保存至本地
 func DownloadHttpFile(url string, saveTo string, timeoutMs int) (int64, error) {
-	var c http.Client
-	if timeoutMs > 0 {
-		c.Timeout = time.Duration(timeoutMs) * time.Millisecond
-	}
-	resp, err := c.Get(url)
-	if err != nil {
-		return -1, err
-	}
-	defer resp.Body.Close()
-
-	fp, err := os.Create(saveTo)
-	if err != nil {
-		return -1, err
-	}
-	defer fp.Close()
-
-	return io.Copy(fp, resp.Body)
+	_ = "STUB: not implemented"
+	return 0, nil
 }

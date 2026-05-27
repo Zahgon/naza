@@ -9,9 +9,7 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"os"
 
 	"github.com/q191201771/naza/pkg/chartbar"
 
@@ -25,12 +23,4 @@ func main() {
 	fmt.Print(output)
 }
 
-func parseFlag() string {
-	dir := flag.String("f", "", "csv filename")
-	flag.Parse()
-	if *dir == "" {
-		flag.Usage()
-		os.Exit(1)
-	}
-	return *dir
-}
+func parseFlag() string { _ = "STUB: not implemented"; return "" }

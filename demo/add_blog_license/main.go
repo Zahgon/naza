@@ -10,7 +10,6 @@ package main
 
 import (
 	"bytes"
-	"flag"
 	"fmt"
 	"os"
 
@@ -86,12 +85,4 @@ func main() {
 	nazalog.Infof("count. mod=%d, skip=%d", modCount, skipCount)
 }
 
-func parseFlag() string {
-	dir := flag.String("d", "", "dir of posts")
-	flag.Parse()
-	if *dir == "" {
-		flag.Usage()
-		os.Exit(1)
-	}
-	return *dir
-}
+func parseFlag() string { _ = "STUB: not implemented"; return "" }

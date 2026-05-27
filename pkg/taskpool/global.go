@@ -10,23 +10,13 @@ package taskpool
 
 var global Pool
 
-func Go(task TaskFn, param ...interface{}) {
-	global.Go(task, param...)
-}
+func Go(task TaskFn, param ...interface{}) { _ = "STUB: not implemented"; return }
 
-func GetCurrentStatus() Status {
-	return global.GetCurrentStatus()
-}
+func GetCurrentStatus() Status { _ = "STUB: not implemented"; return *new(Status) }
 
-func KillIdleWorkers() {
-	global.KillIdleWorkers()
-}
+func KillIdleWorkers() { _ = "STUB: not implemented"; return }
 
-func Init(modOptions ...ModOption) error {
-	var err error
-	global, err = NewPool(modOptions...)
-	return err
-}
+func Init(modOptions ...ModOption) error { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	_ = Init()

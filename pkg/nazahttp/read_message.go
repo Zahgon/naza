@@ -11,7 +11,6 @@ package nazahttp
 import (
 	"io"
 	"net/http"
-	"strconv"
 )
 
 // e.g. bufio.Reader
@@ -45,56 +44,19 @@ type HttpRespMsgCtx struct {
 }
 
 func ReadHttpRequestMessage(r HttpReader) (ctx HttpReqMsgCtx, err error) {
-	msgCtx, err := ReadHttpMessage(r)
-	if err != nil {
-		return
-	}
-	ctx.Method = msgCtx.ReqMethodOrRespVersion
-	ctx.Uri = msgCtx.ReqUriOrRespStatusCode
-	ctx.Version = msgCtx.ReqVersionOrRespReason
-	ctx.Headers = msgCtx.Headers
-	ctx.Body = msgCtx.Body
-	return
+	_ = "STUB: not implemented"
+	return *new(HttpReqMsgCtx), nil
 }
 
 func ReadHttpResponseMessage(r HttpReader) (ctx HttpRespMsgCtx, err error) {
-	msgCtx, err := ReadHttpMessage(r)
-	if err != nil {
-		return
-	}
-	ctx.Version = msgCtx.ReqMethodOrRespVersion
-	ctx.StatusCode = msgCtx.ReqUriOrRespStatusCode
-	ctx.Reason = msgCtx.ReqVersionOrRespReason
-	ctx.Headers = msgCtx.Headers
-	ctx.Body = msgCtx.Body
-	return
+	_ = "STUB: not implemented"
+	return *new(HttpRespMsgCtx), nil
 }
 
 // ReadHttpMessage
 //
 // 注意，如果HTTP Header中不包含`Content-Length`，则不会读取HTTP Body，并且err返回值为nil
-//
 func ReadHttpMessage(r HttpReader) (ctx HttpMsgCtx, err error) {
-	var requestLine string
-	requestLine, ctx.Headers, err = ReadHttpHeader(r)
-	if err != nil {
-		return ctx, err
-	}
-	ctx.ReqMethodOrRespVersion, ctx.ReqUriOrRespStatusCode, ctx.ReqVersionOrRespReason, err = ParseHttpRequestLine(requestLine)
-	if err != nil {
-		return ctx, err
-	}
-
-	contentLength := ctx.Headers.Get(HeaderFieldContentLength)
-	if len(contentLength) == 0 {
-		return ctx, nil
-	}
-	cl, err := strconv.Atoi(contentLength)
-	if err != nil {
-		return ctx, err
-	}
-	ctx.Body = make([]byte, cl)
-	_, err = io.ReadFull(r, ctx.Body)
-
-	return ctx, err
+	_ = "STUB: not implemented"
+	return *new(HttpMsgCtx), nil
 }

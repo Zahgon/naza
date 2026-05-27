@@ -14,7 +14,6 @@
 package connection
 
 import (
-	"bufio"
 	"errors"
 	"io"
 	"net"
@@ -24,8 +23,6 @@ import (
 	"github.com/q191201771/naza/pkg/unique"
 
 	"github.com/q191201771/naza/pkg/nazaatomic"
-
-	"github.com/q191201771/naza/pkg/nazalog"
 )
 
 var (
@@ -160,38 +157,8 @@ var defaultOption = Option{
 type ModOption func(option *Option)
 
 func New(conn net.Conn, modOptions ...ModOption) Connection {
-	c := new(connection)
-	c.uniqueKey = uniqueGen.GenUniqueKey()
-	c.doneChan = make(chan error, 1)
-	c.Conn = conn
-
-	c.option = defaultOption
-
-	for _, fn := range modOptions {
-		fn(&c.option)
-	}
-
-	if c.option.ReadBufSize > 0 {
-		c.r = bufio.NewReaderSize(conn, c.option.ReadBufSize)
-	} else {
-		c.r = conn
-	}
-
-	if c.option.WriteBufSize > 0 {
-		c.w = bufio.NewWriterSize(conn, c.option.WriteBufSize)
-	} else {
-		c.w = conn
-	}
-
-	if c.option.WriteChanSize > 0 {
-		c.wChan = make(chan wMsg, c.option.WriteChanSize)
-		c.flushDoneChan = make(chan struct{}, 1)
-		c.exitChan = make(chan struct{}, 1)
-		go c.runWriteLoop()
-	}
-
-	nazalog.Debugf("[%s] lifecycle new connection. net.Conn=%p, naza.Connection=%p", c.uniqueKey, conn, c)
-	return c
+	_ = "STUB: not implemented"
+	return *new(Connection)
 }
 
 type wMsgType int
@@ -226,299 +193,75 @@ type connection struct {
 
 var uniqueGen *unique.SingleGenerator
 
-func (c *connection) ModWriteChanSize(n int) {
-	if c.option.WriteChanSize > 0 {
-		panic(ErrConnectionPanic)
-	}
-	if n == 0 {
-		return
-	}
+func (c *connection) ModWriteChanSize(n int) { _ = "STUB: not implemented"; return }
 
-	c.option.WriteChanSize = n
-	c.wChan = make(chan wMsg, n)
-	c.flushDoneChan = make(chan struct{}, 1)
-	c.exitChan = make(chan struct{}, 1)
-	go c.runWriteLoop()
-}
+func (c *connection) ModWriteBufSize(n int) { _ = "STUB: not implemented"; return }
 
-func (c *connection) ModWriteBufSize(n int) {
-	if c.option.WriteBufSize > 0 {
-		// 如果之前已经设置过写缓冲，直接 panic
-		// 这里改成 flush 后替换成新缓冲也行，暂时没这个必要
-		panic(ErrConnectionPanic)
-	}
-	c.option.WriteBufSize = n
-	c.w = bufio.NewWriterSize(c.Conn, n)
-}
+// 如果之前已经设置过写缓冲，直接 panic
+// 这里改成 flush 后替换成新缓冲也行，暂时没这个必要
 
-func (c *connection) ModReadTimeoutMs(n int) {
-	if c.option.ReadTimeoutMs > 0 {
-		panic(ErrConnectionPanic)
-	}
-	c.option.ReadTimeoutMs = n
-}
+func (c *connection) ModReadTimeoutMs(n int) { _ = "STUB: not implemented"; return }
 
-func (c *connection) ModWriteTimeoutMs(n int) {
-	if c.option.WriteTimeoutMs > 0 {
-		panic(ErrConnectionPanic)
-	}
-	c.option.WriteTimeoutMs = n
-}
+func (c *connection) ModWriteTimeoutMs(n int) { _ = "STUB: not implemented"; return }
 
 func (c *connection) ReadAtLeast(buf []byte, min int) (n int, err error) {
-	if c.option.ReadTimeoutMs > 0 {
-		err = c.SetReadDeadline(time.Now().Add(time.Duration(c.option.ReadTimeoutMs) * time.Millisecond))
-		if err != nil {
-			c.close(err)
-			return 0, err
-		}
-	}
-	n, err = io.ReadAtLeast(c.r, buf, min)
-	if err != nil {
-		c.close(err)
-	}
-	c.stat.ReadBytesSum.Add(uint64(n))
-	return n, err
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // TODO chef: 测试 bufio 设置的大小 < 换行符位置时的情况
 func (c *connection) ReadLine() (line []byte, isPrefix bool, err error) {
-	bufioReader, ok := c.r.(*bufio.Reader)
-	if !ok {
-		// 目前只有使用了 bufio.Reader 时才能执行 ReadLine 操作
-		panic(ErrConnectionPanic)
-	}
-	if c.option.ReadTimeoutMs > 0 {
-		err = c.SetReadDeadline(time.Now().Add(time.Duration(c.option.ReadTimeoutMs) * time.Millisecond))
-		if err != nil {
-			c.close(err)
-			return nil, false, err
-		}
-	}
-	line, isPrefix, err = bufioReader.ReadLine()
-	if err != nil {
-		c.close(err)
-	}
-	c.stat.ReadBytesSum.Add(uint64(len(line)))
-	return line, isPrefix, err
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
-func (c *connection) Read(b []byte) (n int, err error) {
-	if c.option.ReadTimeoutMs > 0 {
-		err = c.SetReadDeadline(time.Now().Add(time.Duration(c.option.ReadTimeoutMs) * time.Millisecond))
-		if err != nil {
-			c.close(err)
-			return 0, err
-		}
-	}
-	n, err = c.r.Read(b)
-	if err != nil {
-		c.close(err)
-	}
-	c.stat.ReadBytesSum.Add(uint64(n))
-	return n, err
-}
+// 目前只有使用了 bufio.Reader 时才能执行 ReadLine 操作
 
-func (c *connection) Write(b []byte) (n int, err error) {
-	if c.closedFlag.Load() {
-		return 0, ErrClosedAlready
-	}
-	if c.option.WriteChanSize > 0 {
-		switch c.option.WriteChanFullBehavior {
-		case WriteChanFullBehaviorBlock:
-			c.wChan <- wMsg{t: wMsgTypeWrite, b: b}
-			return len(b), nil
-		case WriteChanFullBehaviorReturnError:
-			select {
-			case c.wChan <- wMsg{t: wMsgTypeWrite, b: b}:
-				return len(b), nil
-			default:
-				return 0, ErrWriteChanFull
-			}
-		}
-	}
-	return c.write(b)
-}
+func (c *connection) Read(b []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
+
+func (c *connection) Write(b []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (c *connection) Writev(b net.Buffers) (n int, err error) {
-	if c.closedFlag.Load() {
-		return 0, ErrClosedAlready
-	}
-	if c.option.WriteChanSize > 0 {
-		for _, v := range b {
-			n += len(v)
-		}
-		switch c.option.WriteChanFullBehavior {
-		case WriteChanFullBehaviorBlock:
-			c.wChan <- wMsg{t: wMsgTypeWritev, bs: b}
-			return n, nil
-		case WriteChanFullBehaviorReturnError:
-			select {
-			case c.wChan <- wMsg{t: wMsgTypeWritev, bs: b}:
-				return n, nil
-			default:
-				return 0, ErrWriteChanFull
-			}
-		}
-	}
-	return c.writev(b)
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (c *connection) Flush() error {
-	if c.closedFlag.Load() {
-		return ErrClosedAlready
-	}
-	if c.option.WriteChanSize > 0 {
-		c.wChan <- wMsg{t: wMsgTypeFlush}
-		<-c.flushDoneChan
-		return nil
-	}
+func (c *connection) Flush() error { _ = "STUB: not implemented"; return nil }
 
-	return c.flush()
-}
+func (c *connection) Close() error { _ = "STUB: not implemented"; return nil }
 
-func (c *connection) Close() error {
-	nazalog.Debugf("[%s] Close.", c.uniqueKey)
-	c.close(nil)
-	return nil
-}
+func (c *connection) Done() <-chan error { _ = "STUB: not implemented"; return nil }
 
-func (c *connection) Done() <-chan error {
-	return c.doneChan
-}
+func (c *connection) LocalAddr() net.Addr { _ = "STUB: not implemented"; return *new(net.Addr) }
 
-func (c *connection) LocalAddr() net.Addr {
-	return c.Conn.LocalAddr()
-}
+func (c *connection) RemoteAddr() net.Addr { _ = "STUB: not implemented"; return *new(net.Addr) }
 
-func (c *connection) RemoteAddr() net.Addr {
-	return c.Conn.RemoteAddr()
-}
+func (c *connection) SetDeadline(t time.Time) error { _ = "STUB: not implemented"; return nil }
 
-func (c *connection) SetDeadline(t time.Time) error {
-	err := c.Conn.SetDeadline(t)
-	if err != nil {
-		c.close(err)
-	}
-	return err
-}
+func (c *connection) SetReadDeadline(t time.Time) error { _ = "STUB: not implemented"; return nil }
 
-func (c *connection) SetReadDeadline(t time.Time) error {
-	err := c.Conn.SetReadDeadline(t)
-	if err != nil {
-		c.close(err)
-	}
-	return err
-}
+func (c *connection) SetWriteDeadline(t time.Time) error { _ = "STUB: not implemented"; return nil }
 
-func (c *connection) SetWriteDeadline(t time.Time) error {
-	err := c.Conn.SetWriteDeadline(t)
-	if err != nil {
-		c.close(err)
-	}
-	return err
-}
+func (c *connection) GetStat() (s Stat) { _ = "STUB: not implemented"; return *new(Stat) }
 
-func (c *connection) GetStat() (s Stat) {
-	s.ReadBytesSum = c.stat.ReadBytesSum.Load()
-	s.WroteBytesSum = c.stat.WroteBytesSum.Load()
-	return
-}
-
-func (c *connection) write(b []byte) (n int, err error) {
-	if c.option.WriteTimeoutMs > 0 {
-		err = c.SetWriteDeadline(time.Now().Add(time.Duration(c.option.WriteTimeoutMs) * time.Millisecond))
-		if err != nil {
-			c.close(err)
-			return 0, err
-		}
-	}
-	n, err = c.w.Write(b)
-	if err != nil {
-		c.close(err)
-	}
-	c.stat.WroteBytesSum.Add(uint64(n))
-	return n, err
-}
+func (c *connection) write(b []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (c *connection) writev(b net.Buffers) (n int, err error) {
-	if c.option.WriteTimeoutMs > 0 {
-		err = c.SetWriteDeadline(time.Now().Add(time.Duration(c.option.WriteTimeoutMs) * time.Millisecond))
-		if err != nil {
-			c.close(err)
-			return 0, err
-		}
-	}
-	var n64 int64
-	n64, err = b.WriteTo(c.w)
-	if err != nil {
-		c.close(err)
-	}
-	n = int(n64)
-	c.stat.WroteBytesSum.Add(uint64(n))
-	return n, err
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (c *connection) runWriteLoop() {
-	for {
-		select {
-		case <-c.exitChan:
-			//nazalog.Debugf("[%s] recv exitChan and exit write loop", c.uniqueKey)
-			return
-		case msg := <-c.wChan:
-			switch msg.t {
-			case wMsgTypeWrite:
-				if _, err := c.write(msg.b); err != nil {
-					return
-				}
-			case wMsgTypeWritev:
-				if _, err := c.writev(msg.bs); err != nil {
-					return
-				}
-			case wMsgTypeFlush:
-				if err := c.flush(); err != nil {
-					c.flushDoneChan <- struct{}{}
-					return
-				}
-				c.flushDoneChan <- struct{}{}
-			}
-		}
-	}
-}
+func (c *connection) runWriteLoop() { _ = "STUB: not implemented"; return }
 
-func (c *connection) flush() error {
-	w, ok := c.w.(*bufio.Writer)
-	if ok {
-		if c.option.WriteTimeoutMs > 0 {
-			err := c.SetWriteDeadline(time.Now().Add(time.Duration(c.option.WriteTimeoutMs) * time.Millisecond))
-			if err != nil {
-				c.close(err)
-				return err
-			}
-		}
-		if err := w.Flush(); err != nil {
-			c.close(err)
-			return err
-		}
-	}
-	return nil
-}
+//nazalog.Debugf("[%s] recv exitChan and exit write loop", c.uniqueKey)
 
-func (c *connection) close(err error) {
-	c.closeOnce.Do(func() {
-		nazalog.Debugf("[%s] close once. err=%+v", c.uniqueKey, err)
-		c.closedFlag.Store(true)
-		if c.option.WriteChanSize > 0 {
-			c.exitChan <- struct{}{}
-		}
+func (c *connection) flush() error { _ = "STUB: not implemented"; return nil }
 
-		// 注意，先Close后再发送消息，保证消息发送前，已经Close掉了
-		_ = c.Conn.Close()
-		c.doneChan <- err
+func (c *connection) close(err error) { _ = "STUB: not implemented"; return }
 
-		// 注意，如果使用了wChan，并不关闭它，避免竞态条件下connection继续使用它造成问题。让它随connection对象释放。
-	})
-}
+// 注意，先Close后再发送消息，保证消息发送前，已经Close掉了
+
+// 注意，如果使用了wChan，并不关闭它，避免竞态条件下connection继续使用它造成问题。让它随connection对象释放。
 
 func init() {
 	uniqueGen = unique.NewSingleGenerator("NAZACONN")

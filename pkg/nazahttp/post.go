@@ -9,8 +9,6 @@
 package nazahttp
 
 import (
-	"bytes"
-	"encoding/json"
 	"net/http"
 )
 
@@ -18,13 +16,6 @@ import (
 // @param info 需要序列化的结构体
 // @param client 注意，如果为nil，则使用http.DefaultClient
 func PostJson(url string, info interface{}, client *http.Client) (*http.Response, error) {
-	j, err := json.Marshal(info)
-	if err != nil {
-		return nil, err
-	}
-	b := bytes.NewBuffer(j)
-	if client == nil {
-		client = http.DefaultClient
-	}
-	return client.Post(url, HeaderFieldContentType, b)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

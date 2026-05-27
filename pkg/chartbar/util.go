@@ -8,10 +8,6 @@
 
 package chartbar
 
-import "math"
-
 // TODO(chef): 移入nazamath中
 
-func isInteger(v float64) bool {
-	return math.Ceil(v) == math.Floor(v)
-}
+func isInteger(v float64) bool { _ = "STUB: not implemented"; return false }

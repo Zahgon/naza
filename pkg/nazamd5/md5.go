@@ -8,16 +8,7 @@
 
 package nazamd5
 
-import (
-	"crypto/md5"
-	"encoding/hex"
-)
-
 // Md5 返回32字节小写字符串
 //
 // TODO(chef): [refactor] 重命名为Md5sum
-func Md5(b []byte) string {
-	h := md5.New()
-	h.Write(b)
-	return hex.EncodeToString(h.Sum(nil))
-}
+func Md5(b []byte) string { _ = "STUB: not implemented"; return "" }

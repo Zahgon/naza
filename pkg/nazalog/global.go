@@ -8,151 +8,79 @@
 
 package nazalog
 
-import (
-	"fmt"
-
-	"github.com/q191201771/naza/pkg/nazareflect"
-
-	"github.com/q191201771/naza/pkg/fake"
-)
-
 var global Logger
 
-func Tracef(format string, v ...interface{}) {
-	global.Out(LevelTrace, 2, fmt.Sprintf(format, v...))
-}
+func Tracef(format string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Debugf(format string, v ...interface{}) {
-	global.Out(LevelDebug, 2, fmt.Sprintf(format, v...))
-}
+func Debugf(format string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Infof(format string, v ...interface{}) {
-	global.Out(LevelInfo, 2, fmt.Sprintf(format, v...))
-}
+func Infof(format string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Warnf(format string, v ...interface{}) {
-	global.Out(LevelWarn, 2, fmt.Sprintf(format, v...))
-}
+func Warnf(format string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Errorf(format string, v ...interface{}) {
-	global.Out(LevelError, 2, fmt.Sprintf(format, v...))
-}
+func Errorf(format string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Fatalf(format string, v ...interface{}) {
-	global.Out(LevelFatal, 2, fmt.Sprintf(format, v...))
-	fake.Os_Exit(1)
-}
+func Fatalf(format string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Panicf(format string, v ...interface{}) {
-	global.Out(LevelPanic, 2, fmt.Sprintf(format, v...))
-	panic(fmt.Sprintf(format, v...))
-}
+func Panicf(format string, v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Trace(v ...interface{}) {
-	global.Out(LevelTrace, 2, fmt.Sprint(v...))
-}
+func Trace(v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Debug(v ...interface{}) {
-	global.Out(LevelDebug, 2, fmt.Sprint(v...))
-}
+func Debug(v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Info(v ...interface{}) {
-	global.Out(LevelInfo, 2, fmt.Sprint(v...))
-}
+func Info(v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Warn(v ...interface{}) {
-	global.Out(LevelWarn, 2, fmt.Sprint(v...))
-}
+func Warn(v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Error(v ...interface{}) {
-	global.Out(LevelError, 2, fmt.Sprint(v...))
-}
+func Error(v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Fatal(v ...interface{}) {
-	global.Out(LevelFatal, 2, fmt.Sprint(v...))
-	fake.Os_Exit(1)
-}
+func Fatal(v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Panic(v ...interface{}) {
-	global.Out(LevelPanic, 2, fmt.Sprint(v...))
-	panic(fmt.Sprint(v...))
-}
+func Panic(v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Output(calldepth int, s string) error {
-	global.Out(LevelInfo, calldepth, s)
-	return nil
-}
+func Output(calldepth int, s string) error { _ = "STUB: not implemented"; return nil }
 
-func Print(v ...interface{}) {
-	global.Out(LevelInfo, 2, fmt.Sprint(v...))
-}
+func Print(v ...interface{}) { _ = "STUB: not implemented"; return }
 
-func Printf(format string, v ...interface{}) {
-	global.Out(LevelInfo, 2, fmt.Sprintf(format, v...))
-}
-func Println(v ...interface{}) {
-	global.Out(LevelInfo, 2, fmt.Sprint(v...))
-}
-func Fatalln(v ...interface{}) {
-	global.Out(LevelInfo, 2, fmt.Sprint(v...))
-	fake.Os_Exit(1)
-}
-func Panicln(v ...interface{}) {
-	global.Out(LevelInfo, 2, fmt.Sprint(v...))
-	panic(fmt.Sprint(v...))
-}
+func Printf(format string, v ...interface{}) { _ = "STUB: not implemented"; return }
+
+func Println(v ...interface{}) { _ = "STUB: not implemented"; return }
+
+func Fatalln(v ...interface{}) { _ = "STUB: not implemented"; return }
+
+func Panicln(v ...interface{}) { _ = "STUB: not implemented"; return }
 
 func Assert(expected interface{}, actual interface{}, extInfo ...string) {
-	if !nazareflect.Equal(expected, actual) {
-		var v string
-		if len(extInfo) == 0 {
-			v = fmt.Sprintf("assert failed. excepted=%+v, but actual=%+v", expected, actual)
-		} else {
-			v = fmt.Sprintf("assert failed. excepted=%+v, but actual=%+v, extInfo=%s", expected, actual, extInfo)
-		}
-		switch global.GetOption().AssertBehavior {
-		case AssertError:
-			global.Out(LevelError, 2, v)
-		case AssertFatal:
-			global.Out(LevelFatal, 2, v)
-			fake.Os_Exit(1)
-		case AssertPanic:
-			global.Out(LevelPanic, 2, v)
-			panic(v)
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func Out(level Level, calldepth int, s string) {
-	global.Out(level, calldepth, s)
-}
+func Out(level Level, calldepth int, s string) { _ = "STUB: not implemented"; return }
 
-func Sync() {
-	global.Sync()
-}
+func Sync() { _ = "STUB: not implemented"; return }
 
-func WithPrefix(s string) Logger {
-	return global.WithPrefix(s)
-}
+func WithPrefix(s string) Logger { _ = "STUB: not implemented"; return *new(Logger) }
 
 func GetOption() Option {
-	return global.GetOption()
-}
+	_ = "STUB: not implemented"
+	return *
 
-// ---------------------------------------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------------------------------------
+	new(Option)
+}
 
 // GetGlobalLogger 获取全局Logger
 func GetGlobalLogger() Logger {
-	return global
+	_ = "STUB: not implemented"
+
+	// Init 初始化全局Logger
+	//
+	// 注意，全局Logger在不需要特殊配置时，可以不显示调用 Init 函数
+	// 注意，该方法不会修改global指针指向，而是操作global指针指向的对象
+	return *new(Logger)
 }
 
-// Init 初始化全局Logger
-//
-// 注意，全局Logger在不需要特殊配置时，可以不显示调用 Init 函数
-// 注意，该方法不会修改global指针指向，而是操作global指针指向的对象
-func Init(modOptions ...ModOption) error {
-	return global.Init(modOptions...)
-}
+func Init(modOptions ...ModOption) error { _ = "STUB: not implemented"; return nil }
 
 // SetGlobalLogger 更换全局Logger
 //
@@ -160,10 +88,11 @@ func Init(modOptions ...ModOption) error {
 //
 // TODO(chef): [refactor] 在已经提供 Init 的前提下，是否应该删除掉该函数
 func SetGlobalLogger(l Logger) {
-	global = l
-}
+	_ = "STUB: not implemented"
 
-// ---------------------------------------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------------------------------------
+	return
+}
 
 func init() {
 	global, _ = newLogger()

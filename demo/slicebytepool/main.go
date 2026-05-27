@@ -9,7 +9,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"math/rand"
 	"os"
@@ -26,7 +25,7 @@ import (
 
 var bp slicebytepool.SliceBytePool
 
-//var count int32
+// var count int32
 var doneCount uint32
 var tmpSliceByte []byte
 
@@ -34,43 +33,26 @@ var gorutineNum = 1000
 var loopNum = 1000
 var sleepMs = time.Duration(10) * time.Millisecond
 
-func size() int {
-	return random(1, 128*1024)
+func size() int { _ = "STUB: not implemented"; return 0 }
 
-	//return 128 * 1024
+//return 128 * 1024
 
-	//ss := []int{1000, 2000, 5000}
-	//////ss := []int{128, 1024, 4096, 16384}
-	//atomic.AddInt32(&count, 1)
-	//return ss[count % 3]
+//ss := []int{1000, 2000, 5000}
+//////ss := []int{128, 1024, 4096, 16384}
+//atomic.AddInt32(&count, 1)
+//return ss[count % 3]
 
-	//count++
-	//if count > 128 * 1024 {
-	//	count = 1
-	//}
-	//return count
-}
+//count++
+//if count > 128 * 1024 {
+//	count = 1
+//}
+//return count
 
-func random(l, r int) int {
-	return l + (rand.Int() % (r - l))
-}
+func random(l, r int) int { _ = "STUB: not implemented"; return 0 }
 
-func originFunc() {
-	size := size()
-	buf := make([]byte, size)
-	tmpSliceByte = buf
-	atomic.AddUint32(&doneCount, 1)
-	time.Sleep(sleepMs)
-}
+func originFunc() { _ = "STUB: not implemented"; return }
 
-func bufferPoolFunc() {
-	size := size()
-	buf := bp.Get(size)
-	tmpSliceByte = buf
-	time.Sleep(sleepMs)
-	bp.Put(buf)
-	atomic.AddUint32(&doneCount, 1)
-}
+func bufferPoolFunc() { _ = "STUB: not implemented"; return }
 
 func main() {
 	strategy := parseFlag()
@@ -131,12 +113,4 @@ func main() {
 	nazalog.Debug("< loop.")
 }
 
-func parseFlag() int {
-	strategy := flag.Int("t", 0, "type: 1. multi std pool 2. multi slice pool 3. origin")
-	flag.Parse()
-	if *strategy < 1 || *strategy > 3 {
-		flag.Usage()
-		os.Exit(1)
-	}
-	return *strategy
-}
+func parseFlag() int { _ = "STUB: not implemented"; return 0 }

@@ -20,27 +20,10 @@ type ExitResult struct {
 var exitResult ExitResult
 
 // 正常情况下，调用 os.Exit，单元测试时，可通过调用 WithFakeExit 配置为不调用 os.Exit
-func Os_Exit(code int) {
-	exit(code)
-}
+func Os_Exit(code int) { _ = "STUB: not implemented"; return }
 
-func WithFakeOsExit(fn func()) ExitResult {
-	startFakeExit()
-	fn()
-	stopFakeExit()
-	return exitResult
-}
+func WithFakeOsExit(fn func()) ExitResult { _ = "STUB: not implemented"; return *new(ExitResult) }
 
-func startFakeExit() {
-	exitResult.HasExit = false
-	exitResult.ExitCode = 0
+func startFakeExit() { _ = "STUB: not implemented"; return }
 
-	exit = func(code int) {
-		exitResult.HasExit = true
-		exitResult.ExitCode = code
-	}
-}
-
-func stopFakeExit() {
-	exit = os.Exit
-}
+func stopFakeExit() { _ = "STUB: not implemented"; return }

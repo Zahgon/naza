@@ -10,23 +10,16 @@ package nazasync
 
 import (
 	"sync"
-	"sync/atomic"
 )
 
 type StdOnce struct {
 	core sync.Once
 }
 
-func (o *StdOnce) Do(f func()) {
-	o.core.Do(f)
-}
+func (o *StdOnce) Do(f func()) { _ = "STUB: not implemented"; return }
 
 type NonblockingOnce struct {
 	done uint32
 }
 
-func (o *NonblockingOnce) Do(f func()) {
-	if atomic.CompareAndSwapUint32(&o.done, 0, 1) {
-		f()
-	}
-}
+func (o *NonblockingOnce) Do(f func()) { _ = "STUB: not implemented"; return }

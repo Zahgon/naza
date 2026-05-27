@@ -10,7 +10,6 @@
 package unique
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/q191201771/naza/pkg/nazaatomic"
@@ -18,9 +17,7 @@ import (
 
 var global MultiGenerator
 
-func GenUniqueKey(prefix string) string {
-	return global.GenUniqueKey(prefix)
-}
+func GenUniqueKey(prefix string) string { _ = "STUB: not implemented"; return "" }
 
 // 只管理一个需要生成unique id的generator对象
 type SingleGenerator struct {
@@ -34,28 +31,11 @@ type MultiGenerator struct {
 	prefix2id map[string]uint64
 }
 
-func NewSingleGenerator(prefix string) *SingleGenerator {
-	return &SingleGenerator{
-		prefix: prefix,
-	}
-}
+func NewSingleGenerator(prefix string) *SingleGenerator { _ = "STUB: not implemented"; return nil }
 
-func (si *SingleGenerator) GenUniqueKey() string {
-	return fmt.Sprintf("%s%d", si.prefix, si.id.Increment())
-}
+func (si *SingleGenerator) GenUniqueKey() string { _ = "STUB: not implemented"; return "" }
 
-func (mi *MultiGenerator) GenUniqueKey(prefix string) string {
-	mi.mu.Lock()
-	defer mi.mu.Unlock()
-	id, ok := mi.prefix2id[prefix]
-	if ok {
-		id++
-	} else {
-		id = 1
-	}
-	mi.prefix2id[prefix] = id
-	return fmt.Sprintf("%s%d", prefix, id)
-}
+func (mi *MultiGenerator) GenUniqueKey(prefix string) string { _ = "STUB: not implemented"; return "" }
 
 func init() {
 	global.prefix2id = make(map[string]uint64)

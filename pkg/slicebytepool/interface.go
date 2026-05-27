@@ -42,23 +42,6 @@ type Bucket interface {
 }
 
 func NewSliceBytePool(strategy Strategy) SliceBytePool {
-	var capToFreeBucket map[int]Bucket
-
-	switch strategy {
-	case StrategyMultiStdPoolBucket:
-		capToFreeBucket = make(map[int]Bucket)
-		for i := minSize; i <= maxSize; i <<= 1 {
-			capToFreeBucket[i] = NewStdPoolBucket()
-		}
-	case StrategyMultiSlicePoolBucket:
-		capToFreeBucket = make(map[int]Bucket)
-		for i := minSize; i <= maxSize; i <<= 1 {
-			capToFreeBucket[i] = NewSliceBucket()
-		}
-	}
-
-	return &sliceBytePool{
-		strategy:        strategy,
-		capToFreeBucket: capToFreeBucket,
-	}
+	_ = "STUB: not implemented"
+	return *new(SliceBytePool)
 }

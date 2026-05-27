@@ -8,42 +8,33 @@
 
 package filesystemlayer
 
-import (
-	"io/ioutil"
-	"os"
-)
-
 type FslDisk struct {
 }
 
-func (f *FslDisk) Type() FslType {
-	return FslTypeDisk
-}
+func (f *FslDisk) Type() FslType { _ = "STUB: not implemented"; return *new(FslType) }
 
 func (f *FslDisk) Create(name string) (IFile, error) {
-	return os.Create(name)
+	_ = "STUB: not implemented"
+	return *new(IFile), nil
 }
 
 func (f *FslDisk) Rename(oldpath string, newpath string) error {
-	return os.Rename(oldpath, newpath)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (f *FslDisk) MkdirAll(path string, perm uint32) error {
-	return os.MkdirAll(path, os.FileMode(perm))
-}
+func (f *FslDisk) MkdirAll(path string, perm uint32) error { _ = "STUB: not implemented"; return nil }
 
-func (f *FslDisk) Remove(name string) error {
-	return os.Remove(name)
-}
+func (f *FslDisk) Remove(name string) error { _ = "STUB: not implemented"; return nil }
 
-func (f *FslDisk) RemoveAll(path string) error {
-	return os.RemoveAll(path)
-}
+func (f *FslDisk) RemoveAll(path string) error { _ = "STUB: not implemented"; return nil }
 
 func (f *FslDisk) ReadFile(filename string) ([]byte, error) {
-	return ioutil.ReadFile(filename)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (f *FslDisk) WriteFile(filename string, data []byte, perm uint32) error {
-	return ioutil.WriteFile(filename, data, os.FileMode(perm))
+	_ = "STUB: not implemented"
+	return nil
 }
